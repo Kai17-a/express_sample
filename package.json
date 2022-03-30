@@ -13,6 +13,7 @@
     "express-session": "^1.17.2",
     "express-validator": "^6.14.0",
     "http-errors": "~1.6.3",
+    "markdown-it": "^12.3.2",
     "morgan": "~1.9.1",
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1",

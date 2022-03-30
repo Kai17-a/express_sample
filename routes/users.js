@@ -62,19 +62,6 @@ router.get('/edit', (req, res, next) => {
 });
 
 router.post('/edit', (req, res, next) => {
-  // db.sequelize.sync()
-  // .then(() => db.User.update({
-  //   name: req.body.name,
-  //   pass: req.body.pass,
-  //   mail: req.body.mail,
-  //   age: req.body.age
-  // },
-  // {
-  //   where:{id:req.body.id}
-  // }))
-  // .then(usr => {
-  //   res.redirect('/users');
-  // });
   db.User.findByPk(req.body.id)
   .then(usr => {
     usr.name = req.body.name;
@@ -104,6 +91,38 @@ router.post('/delete', (req, res, next) => {
   .then(usr => {
     res.redirect('/users');
   });
-})
+});
+
+router.get('/login', (req, res, next) => {
+  var data = {
+    title: 'Users/Login',
+    content: '名前とパスワードを入力してください'
+  }
+  res.render('users/login', data);
+});
+
+router.post('/login', (req, res, next) => {
+  db.User.findOne({
+    where:{
+      name:req.body.name,
+      pass:req.body.pass,
+    }
+  }).then(usr => {
+    if (usr != null) {
+      req.session.login = usr;
+      let back = req.session.back;
+      if (back == null) {
+        back = '/';
+      }
+      res.redirect(back);
+    } else {
+      var data = {
+        title: 'Users/Login',
+        content: '名前かパスワードに問題があります。再度入力してください。'
+      }
+      res.render('users/login', data);
+    }
+  })
+});
 
 module.exports = router;
